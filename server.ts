@@ -16,8 +16,9 @@ async function startServer() {
 
   app.use(express.json({ limit: '25mb' }));
 
+  const apiKey = process.env.GEMINI_API_KEY || 'AIzaSyCpOVndZ-V1Zq9ripYHgAhjAhEsSWhtJPY';
   const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
+    apiKey,
     httpOptions: {
       headers: {
         'User-Agent': 'aistudio-build',
@@ -54,6 +55,15 @@ async function startServer() {
     }
     throw lastError;
   }
+
+  // Health check endpoint
+  app.get('/api/health', (req, res) => {
+    res.json({
+      status: 'ok',
+      hasKey: Boolean(process.env.GEMINI_API_KEY),
+      model: 'gemini-3.8-flash',
+    });
+  });
 
   // 1. Analyze single paragraph
   app.post('/api/gemini/analyze-paragraph', async (req, res) => {
@@ -92,7 +102,7 @@ ${langInstruction}
 Provide your tutor breakdown according to the requested schema.`;
 
       let response: any;
-      const modelCandidates = ['gemini-2.5-flash', 'gemini-3.8-flash'];
+      const modelCandidates = ['gemini-3.1-flash-lite', 'gemini-3.8-flash', 'gemini-flash-latest'];
       let lastErr: any = null;
 
       for (const model of modelCandidates) {
@@ -212,7 +222,7 @@ ${langInstruction}
 Create an exhaustive 1-page high-yield exam revision guide in ${targetLanguage}.`;
 
       let response: any;
-      const modelCandidates = ['gemini-2.5-flash', 'gemini-3.8-flash'];
+      const modelCandidates = ['gemini-3.1-flash-lite', 'gemini-3.8-flash', 'gemini-flash-latest'];
       let lastErr: any = null;
 
       for (const model of modelCandidates) {
