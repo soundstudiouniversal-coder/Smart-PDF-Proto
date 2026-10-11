@@ -1,0 +1,6 @@
+{
+  "name": "Smart PDF Analyzer",
+  "description": "AI-guided PDF study companion for students with line-by-line reading, real-time explanation, exam notes, and interactive revision.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
